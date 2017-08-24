@@ -1,0 +1,27 @@
+{
+  "name": "rules-js",
+  "version": "1.0.0",
+  "description": "A simple rule-engine for javascript",
+  "main": "index.js",
+  "author": "Claudio Fernandez <claudio.fernandez@bluealba.com>",
+  "license": "ISC",
+  "scripts": {
+    "test": "eslint '.' && nyc --reporter=html --reporter=text mocha",
+    "lint": "eslint '.'",
+    "coverage": "nyc report --reporter=text-lcov | coveralls"
+  },
+  "devDependencies": {
+    "chai": "^4.1.1",
+    "chai-things": "^0.2.0",
+    "coveralls": "^2.13.1",
+    "csv-parse": "^1.2.0",
+    "eslint": "^4.5.0",
+    "mocha": "^3.5.0",
+    "nyc": "^11.0.3"
+  },
+  "dependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bluealba/rules-js"
+  }
+}

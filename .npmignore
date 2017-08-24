@@ -1,0 +1,12 @@
+test
+.DS_Store
+node_modules
+*.sublime*
+npm-debug*
+coverage
+.nyc_output
+.editorconfig
+.eslintignore
+.eslintrc
+.travis.yml
+.npmignore
