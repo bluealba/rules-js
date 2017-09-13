@@ -1,16 +1,7 @@
 {
-  "name": "async-actions",
+  "name": "default-rule",
 
   "rules": [
-		{
-			"name": "CalculateCost for all products",
-      "when": { "type": "always" },
-      "then": [
-				 { "type": "fetchSecurityData" },
-				 { "type": "calculateQuantity" },
-				 { "type": "calculateCost" }
-			 ]
-    },
     {
 			"name": "Set commissions for Equities",
       "when": { "type": "productTypeCondition", "productType": "Equity" },
@@ -20,6 +11,11 @@
 			"name": "Set commissions for Options",
       "when": { "type": "productTypeCondition", "productType": "Option" },
 			"then": { "type": "setPercentualCommission", "percentualPoints": 1.25 }
-    }
+    },
+		{
+			"name": "Other products",
+			"when": { "type": "default" },
+			"then": { "type": "error", "message": "Unrecognized product" }
+		}
   ]
 }
