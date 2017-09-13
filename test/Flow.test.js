@@ -1,93 +1,60 @@
 "use strict";
 
 const chai = require("chai"),
-	Engine = require("../lib/Engine"),
-	actions = require("../actions"),
-	conditions = require("../conditions");
+	chaiPromised = require("chai-as-promised");
 
 chai.should();
+chai.use(chaiPromised);
 
-describe("Flow", () => {
+describe("RuleFlow", () => {
+	let ruleFlow;
 
-	const engine = new Engine();
-	let flow;
+	describe("on rules that matches a certain condition should be executed", () => {
+		beforeEach(() => {
+			ruleFlow = require("./examples/simple-rules").ruleFlow;
+		});
 
-	before(() => {
-		engine.context.commissionService = {
-			calculateCommissions(value) {
-				return Promise.resolve(value * 0.01);
+		it("should execute the rules that matches condition A (equities)", () => {
+			const result = ruleFlow.process(createFact({ productType: "Equity", price: 20, quantity: 5 }));
+			return result.should.eventually.have.property("model").that.has.property("commissions", 1);
+		});
+
+		it("should execute the rules that matches condition B (options)", () => {
+			const result = ruleFlow.process(createFact({ productType: "Option", price: 20, quantity: 5 }));
+			return result.should.eventually.have.property("model").that.has.property("commissions", 1.25);
+		});
+	});
+
+	describe("multiple actions can be defined for a single rules", () => {
+		beforeEach(() => {
+			ruleFlow = require("./examples/chained-actions").ruleFlow;
+		});
+
+		it("should execute all the actions for the rule, in order", () => {
+			const result = ruleFlow.process(createFact({ productType: "Equity", price: 25, contracts: 5, security: { contractSize: 20 } }));
+			return result.should.eventually.have.property("model").that.has.property("commissions", 25);
+		});
+	});
+
+	describe("async actions should be resolved before moving forward with evaluation", () => {
+		beforeEach(() => {
+			const rules = require("./examples/async-actions");
+			ruleFlow = rules.ruleFlow;
+
+			rules.engine.context.securityMasterSevice = {
+				fetch(securityId) {
+					return Promise.resolve({ id: securityId, contractSize: 2})
+				}
 			}
-		}
-	});
-
-	beforeEach("create flow", () => {
-		const Side = require("./conditions/Side.condition");
-		const CalculateCommissions = require("./actions/CalculateCommissions.action");
-		const CalculateCost = require("./actions/CalculateCost.action");
-
-		flow = engine.createFlow();
-		flow.addRule({
-			condition: Side.instantiate({ name: "Side", expectedSide: "buy" }),
-			action: [
-				CalculateCommissions.instantiate({ name: "CalculateCommissions" }),
-				CalculateCost.instantiate({ name: "CalculateCost" })
-			]
 		});
 
-		flow.addRule({
-			condition: Side.instantiate({ name: "Side", expectedSide: "sell" }),
-			action: actions.FixedValue.instantiate({ name: "FixedValue", field: "cost", value: 10 })
+		it("should execute all the actions for the rule, in order", () => {
+			const result = ruleFlow.process(createFact({ productType: "Equity", price: 25, contracts: 5, security: "IBM" }));
+			return result.should.eventually.have.property("model").that.has.property("commissions", 2.5);
 		});
-
-		flow.addRule({
-			condition: Side.instantiate({ name: "Side", expectedSide: "sell" }),
-			action: actions.FixedValue.instantiate({ name: "FixedValue", field: "cost", value: 10 })
-		});
-
-		flow.addRule({
-			condition: conditions.MatchAll.instantiate({ name: "MatchAll" }),
-			action: actions.FixedValue.instantiate({ name: "FixedValue", field: "cost", value: 9999 })
-		});
-	});
-
-	describe("Non addition flow", () => {
-
-		beforeEach(() => {
-			flow.rulesAddition = false;
-		});
-
-		it("should process single action rule", () => {
-			const result = flow.process(createFact({ side: "sell", price: 20, quantity: 5 }));
-			return result.should.eventually.have.property("model").that.has.property("cost", 10);
-		});
-
-		it("should process multiple action rule", () => {
-			const result = flow.process(createFact({ side: "buy", price: 20, quantity: 5 }));
-			return result.should.eventually.have.property("model").that.has.property("cost", 101);
-		});
-
-	});
-
-	describe("Addition flow", () => {
-
-		beforeEach(() => {
-			flow.rulesAddition = true;
-		});
-
-		it("should process single action rule", () => {
-			const result = flow.process(createFact({ side: "sell", price: 20, quantity: 5 }));
-			return result.should.eventually.have.property("model").that.has.property("cost", 9999);
-		});
-
-		it("should process multiple action rule", () => {
-			const result = flow.process(createFact({ side: "buy", price: 20, quantity: 5 }));
-			return result.should.eventually.have.property("model").that.has.property("cost", 9999);
-		});
-
 	});
 
 });
-
 
 function createFact(model) {
 	return { model };
