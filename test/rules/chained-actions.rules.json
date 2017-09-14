@@ -1,14 +1,13 @@
 {
-  "name": "async-actions",
+  "name": "chained-actions",
 
   "rules": [
 		{
 			"name": "CalculateCost for all products",
       "when": { "closure": "always" },
       "then": [
-				 { "closure": "fetchSecurityData" },
-				 { "closure": "calculateQuantity" },
-				 { "closure": "calculateCost" }
+				 { "closure": "setQuantity" },
+				 { "closure": "setCost" }
 			 ]
     },
     {

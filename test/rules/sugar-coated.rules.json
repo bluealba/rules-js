@@ -1,0 +1,25 @@
+{
+  "name": "generic-set-rule-with-some-sugar",
+
+  "rules": [
+		{
+			"name": "CalculateCost for all products",
+			"when": "always",
+			"then": [
+				 "fetchSecurityData",
+				 "setQuantity",
+				 { "closure": "setResult", "field": "cost", "calculator": "calculateCost" }
+			 ]
+		},
+    {
+			"name": "Set commissions for Equities",
+      "when": { "closure": "equal", "field": "productType", "value": "Equity" },
+      "then": { "closure": "setResult", "field": "commissions", "calculator": { "closure": "calculatePercentualCommission", "percentualPoints": 1 }}
+    },
+		{
+			"name": "Set commissions for Options",
+      "when": { "closure": "equal", "field": "productType", "value": "Option" },
+			"then": { "closure": "setResult", "field": "commissions", "calculator": { "closure": "calculatePercentualCommission", "percentualPoints": 1.25 }}
+    }
+  ]
+}

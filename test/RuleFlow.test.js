@@ -1,7 +1,7 @@
 "use strict";
 
 const chai = require("chai"),
-	factory = require("./examples"),
+	factory = require("./rules"),
 	chaiPromised = require("chai-as-promised");
 
 chai.should();
@@ -101,8 +101,35 @@ describe("RuleFlow", () => {
 			const result = ruleFlow.process({ productType: "Option", price: 20, quantity: 5, optionType: "Other" });
 			return result.should.be.rejectedWith(Error, "Unrecognized optionType");
 		});
+	});
 
+	describe("a rule can have parameters that are other closures!", () => {
+		beforeEach(() => {
+			ruleFlow = factory("generic-set-rule").ruleFlow;
+		});
 
+		it("inner closures are executed properly by rules", () => {
+			const result = ruleFlow.process({ productType: "Option", price: 20, quantity: 5 });
+			return result.should.eventually.have.property("model").that.has.property("commissions", 1.25);
+		});
+	});
+
+	describe("a parameterless closure can be defined as a string", () => {
+		beforeEach(() => {
+			const rules = factory("sugar-coated");
+			ruleFlow = rules.ruleFlow;
+
+			rules.engine.context.securityMasterSevice = {
+				fetch(securityId) {
+					return Promise.resolve({ id: securityId, contractSize: 2})
+				}
+			}
+		});
+
+		it("inner closures are executed properly by rules", () => {
+			const result = ruleFlow.process({ productType: "Equity", price: 25, contracts: 5, security: "IBM" });
+			return result.should.eventually.have.property("model").that.has.property("commissions", 2.5);
+		});
 	});
 
 });

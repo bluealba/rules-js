@@ -5,7 +5,7 @@
 		{
 			"name": "CalculateCost for all products",
       "when": { "closure": "always" },
-      "then": { "closure": "calculateCost" }
+      "then": { "closure": "setCost" }
     },
     {
 			"name": "Set commissions for Equities",
