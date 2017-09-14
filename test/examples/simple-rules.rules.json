@@ -4,18 +4,18 @@
   "rules": [
 		{
 			"name": "CalculateCost for all products",
-      "when": { "type": "always" },
-      "then": { "type": "calculateCost" }
+      "when": { "closure": "always" },
+      "then": { "closure": "calculateCost" }
     },
     {
 			"name": "Set commissions for Equities",
-      "when": { "type": "productTypeCondition", "productType": "Equity" },
-      "then": { "type": "setPercentualCommission", "percentualPoints": 1 }
+      "when": { "closure": "productTypeCondition", "productType": "Equity" },
+      "then": { "closure": "setPercentualCommission", "percentualPoints": 1 }
     },
 		{
 			"name": "Set commissions for Options",
-      "when": { "type": "productTypeCondition", "productType": "Option" },
-			"then": { "type": "setPercentualCommission", "percentualPoints": 1.25 }
+      "when": { "closure": "productTypeCondition", "productType": "Option" },
+			"then": { "closure": "setPercentualCommission", "percentualPoints": 1.25 }
     }
   ]
 }
