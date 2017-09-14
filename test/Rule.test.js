@@ -25,7 +25,7 @@ describe("Rule", () => {
 
 		beforeEach(() => {
 			engine.addNamedClosure("setFoo", fact => {
-				fact.model.foo = "foo";
+				fact.foo = "foo";
 				return fact;
 			});
 
@@ -43,14 +43,9 @@ describe("Rule", () => {
 			rule.should.have.property("name", "rule-name");
 		});
 
-		it("rule condition can be invoked and return a promise", () => {
-			const result = rule.evaluateCondition(engine.createFact({ "bar": "bar" }))
-			return result.should.eventually.be.true
-		});
-
 		it("rule action can be invoked and return a with modified fact", () => {
-			const result = rule.process(engine.createFact({ "bar": "bar" }))
-			return result.should.eventually.have.property("model").eql({
+			const result = engine.process(rule, { "bar": "bar" });
+			return result.should.eventually.have.property("fact").eql({
 				foo: "foo",
 				bar: "bar"
 			});
