@@ -54,6 +54,10 @@ describe("ClosureFactory", () => {
 			});
 		});
 
+		it("should fail if implementation does not exists", () => {
+			(() => engine.closures.getNamedClosureImpl("true")).should.throw();
+		});
+
 		it("should fail if any of required parameters is missing", () => {
 			engine.closures.addNamedClosureImpl("true", trueFn, { requiredParameters: ["field", "name"] });
 			(() => engine.closures.getNamedClosureImpl("true").validator({ field: "foo" })).should.throw();
