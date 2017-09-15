@@ -1,0 +1,25 @@
+{
+  "name": "async-actions",
+
+  "rules": [
+		{
+			"name": "CalculateCost for all products",
+      "when": { "closure": "always" },
+      "then": [
+				 { "closure": "fetchSecurityData" },
+				 { "closure": "setQuantity" },
+				 { "closure": "setCost" }
+			 ]
+    },
+    {
+			"name": "Set commissions for Equities",
+      "when": { "closure": "equal", "field": "productType", "value": "Equity" },
+      "then": { "closure": "setPercentualCommission", "percentualPoints": 1 }
+    },
+		{
+			"name": "Set commissions for Options",
+      "when": { "closure": "equal", "field": "productType", "value": "Option" },
+			"then": { "closure": "setPercentualCommission", "percentualPoints": 1.25 }
+    }
+  ]
+}

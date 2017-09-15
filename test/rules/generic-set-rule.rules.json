@@ -1,0 +1,21 @@
+{
+  "name": "generic-set-rule",
+
+  "rules": [
+		{
+			"name": "CalculateCost for all products",
+      "when": { "closure": "always" },
+      "then": { "closure": "setResult", "field": "cost", "calculator": { "closure": "calculateCost" }}
+    },
+    {
+			"name": "Set commissions for Equities",
+      "when": { "closure": "equal", "field": "productType", "value": "Equity" },
+      "then": { "closure": "setResult", "field": "commissions", "calculator": { "closure": "calculatePercentualCommission", "percentualPoints": 1 }}
+    },
+		{
+			"name": "Set commissions for Options",
+      "when": { "closure": "equal", "field": "productType", "value": "Option" },
+			"then": { "closure": "setResult", "field": "commissions", "calculator": { "closure": "calculatePercentualCommission", "percentualPoints": 1.25 }}
+    }
+  ]
+}

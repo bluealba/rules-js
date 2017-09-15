@@ -1,0 +1,40 @@
+{
+  "name": "nested-rules",
+
+  "rules": [
+		{
+			"name": "CalculateCost for all products",
+      "when": { "closure": "always" },
+      "then": { "closure": "setCost" }
+    },
+    {
+			"name": "Set commissions for Equities",
+      "when": { "closure": "equal", "field": "productType", "value": "Equity" },
+      "then": { "closure": "setPercentualCommission", "percentualPoints": 1 }
+    },
+		{
+			"name": "Set commissions for Options",
+      "when": { "closure": "equal", "field": "productType", "value": "Option" },
+			"then": {
+				"name": "nested rule evaluation for options",
+				"rules": [
+					{
+						"name": "On Call options",
+			      "when": { "closure": "equal", "field": "optionType", "value": "Call" },
+			      "then": { "closure": "setPercentualCommission", "percentualPoints": 1.1 }
+			    },
+					{
+						"name": "On Put options",
+						"when": { "closure": "equal", "field": "optionType", "value": "Put" },
+						"then": { "closure": "setPercentualCommission", "percentualPoints": 0.9 }
+					},
+					{
+						"name": "Any other is an error",
+						"when": { "closure": "default" },
+						"then": { "closure": "error", "message": "Unrecognized optionType" }
+					}
+				]
+			}
+    }
+  ]
+}

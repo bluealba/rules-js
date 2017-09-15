@@ -1,0 +1,21 @@
+{
+  "name": "default-rule",
+
+  "rules": [
+    {
+			"name": "Set commissions for Equities",
+      "when": { "closure": "equal", "field": "productType", "value": "Equity" },
+      "then": { "closure": "setPercentualCommission", "percentualPoints": 1 }
+    },
+		{
+			"name": "Set commissions for Options",
+      "when": { "closure": "equal", "field": "productType", "value": "Option" },
+			"then": { "closure": "setPercentualCommission", "percentualPoints": 1.25 }
+    },
+		{
+			"name": "Other products",
+			"when": { "closure": "default" },
+			"then": { "closure": "error", "message": "Unrecognized product" }
+		}
+  ]
+}
