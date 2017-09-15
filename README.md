@@ -139,7 +139,7 @@ the library.
 We can register named closures into a rule engine by invoking the following:
 ```javascript
 engine.closures.addNamedClosureImpl("calculateTaxes", (fact, parameters, context)) => {
-	fact.taxes = fact.totalPrice * parameters.salesTax;
+	fact.taxes = fact.totalPrice * 0.08
 	return fact;
 });
 ```
@@ -147,11 +147,62 @@ engine.closures.addNamedClosureImpl("calculateTaxes", (fact, parameters, context
 Notice that in a simplest form the `addNamedClosureImpl` method receive the name
 that we want the closure to have and the closure implementation function.
 
-We can later reference to any named closure in the JSON definition by creating
+We can later reference to any named closure in the JSON rule file by creating
 a json object like the following:
 
 ```json
 { "closure": "calculateTaxes" }
 ```
 
-WIP
+### Closure parameters
+
+We can add parameters to our closures implementation, that way the same closure
+code can be reused in different contexts. We can change the former `calculateTaxes`
+to receive the tax percentage.
+
+```javascript
+engine.closures.addNamedClosureImpl("calculateTaxes", (fact, parameters, context)) => {
+	fact.taxes = fact.totalPrice * parameters.salesTax;
+	return fact;
+}, { requiredParameters: ["salesTax"] });
+```
+
+Now every time that a closure is referenced in a rules file we will need to provide
+a value for the `salesTax` parameter (otherwise we will get an error while parsing
+it!).
+
+```json
+{ "closure": "calculateTaxes", "salesTax": 0.08 }
+```
+
+#### Parameterless closures - syntax sugar
+When using closures that don't receive any parameters we can, instead of writing
+the whole closure object `{ "closure": calculateShipping" }` we can simply
+reference it by name `"calculateShipping"`.
+
+## Rules
+Rules an special kind of closures that are composed by two component closures (of
+any kind!). One of the closures will act as a condition (the *when*), conditionating
+the execution of the second closure (the *then*) to the result of its evaluation.
+
+```json
+	{
+		"when": { "closure": "hasStockLocally" },
+		"then": { "closure": "calculateTaxes", "salesTax": 0.08}
+	}
+```
+
+... which is the same than writing ...
+
+```json
+	{
+		"when": "hasStockLocally",
+		"then": { "closure": "calculateTaxes", "salesTax": 0.08}
+	}
+```
+
+## Rules array (reduce)
+Documentation in process
+
+## Rules flow
+Documentation in process
