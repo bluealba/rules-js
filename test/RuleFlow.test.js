@@ -1,15 +1,18 @@
 "use strict";
 
 const chai = require("chai"),
-	factory = require("./rules"),
+	engine = require("./rules"),
 	chaiPromised = require("chai-as-promised");
 
 chai.should();
 chai.use(chaiPromised);
 
+function createRuleFlow(name) {
+	return engine.closures.create(require(`./rules/${name}.rules.json`));
+}
+
 describe("RuleFlow", () => {
 	let ruleFlow;
-	let engine = factory.engine;
 
 	beforeEach(() => {
 		//TODO: this should be part of context!
@@ -22,7 +25,7 @@ describe("RuleFlow", () => {
 
 	describe("rules that matches a certain condition should be executed", () => {
 		beforeEach(() => {
-			ruleFlow = factory.createRuleFlow("simple-rules");
+			ruleFlow = createRuleFlow("simple-rules");
 		});
 
 		it("should execute the rules that matches condition A (equities)", () => {
@@ -38,7 +41,7 @@ describe("RuleFlow", () => {
 
 	describe("multiple actions can be defined for a single rules", () => {
 		beforeEach(() => {
-			ruleFlow = factory.createRuleFlow("chained-actions");
+			ruleFlow = createRuleFlow("chained-actions");
 		});
 
 		it("should execute all the actions for the rule, in order", () => {
@@ -49,7 +52,7 @@ describe("RuleFlow", () => {
 
 	describe("async actions should be resolved before moving forward with evaluation", () => {
 		beforeEach(() => {
-			ruleFlow = factory.createRuleFlow("async-actions");
+			ruleFlow = createRuleFlow("async-actions");
 		});
 
 		it("should execute all the actions for the rule, in order", () => {
@@ -60,7 +63,7 @@ describe("RuleFlow", () => {
 
 	describe("nested rule flow can be defined as action of a single rule", () => {
 		beforeEach(() => {
-			ruleFlow = factory.createRuleFlow("nested-rules");
+			ruleFlow = createRuleFlow("nested-rules");
 		});
 
 		it("should execute the rules that matches condition B.A (call options)", () => {
@@ -76,7 +79,7 @@ describe("RuleFlow", () => {
 
 	describe("default action should be invoked if no rule evaluates before it", () => {
 		beforeEach(() => {
-			ruleFlow = factory.createRuleFlow("default-rule");
+			ruleFlow = createRuleFlow("default-rule");
 		});
 
 		it("should execute the rules that matches condition A (equities)", () => {
@@ -92,7 +95,7 @@ describe("RuleFlow", () => {
 
 	describe("default should be local to nested flow", () => {
 		beforeEach(() => {
-			ruleFlow = factory.createRuleFlow("nested-rules-with-default");
+			ruleFlow = createRuleFlow("nested-rules-with-default");
 		});
 
 		it("should execute the rules that matches condition B.A (call options)", () => {
@@ -108,7 +111,7 @@ describe("RuleFlow", () => {
 
 	describe("a rule can have parameters that are other closures!", () => {
 		beforeEach(() => {
-			ruleFlow = factory.createRuleFlow("generic-set-rule");
+			ruleFlow = createRuleFlow("generic-set-rule");
 		});
 
 		it("inner closures are executed properly by rules", () => {
@@ -119,7 +122,7 @@ describe("RuleFlow", () => {
 
 	describe("a parameterless closure can be defined as a string", () => {
 		beforeEach(() => {
-			ruleFlow = factory.createRuleFlow("sugar-coated");
+			ruleFlow = createRuleFlow("sugar-coated");
 		});
 
 		it("inner closures are executed properly by rules", () => {
