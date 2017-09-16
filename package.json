@@ -23,8 +23,7 @@
     "sinon": "^3.2.1"
   },
   "dependencies": {
-    "async-class-co": "^0.4.3",
-    "lodash": "^4.17.4"
+    "async-class-co": "^0.4.3"
   },
   "repository": {
     "closure": "git",
