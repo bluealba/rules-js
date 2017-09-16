@@ -5,12 +5,26 @@
 [![npm](https://img.shields.io/npm/dt/rules-js.svg)](https://npmjs.org/package/rules-js)
 [![Coverage Status](https://coveralls.io/repos/github/bluealba/rules-js/badge.svg?branch=master)](https://coveralls.io/github/bluealba/rules-js?branch=master)
 
+## Overview
+
 This is an implementation of a very lightweight pure javascript rule engine.
 It's very loosely inspired on drools, but keeping an extra effort in keeping
 complexity to the bare minimum.
 
+- [Rules.JS](#rulesjs)
+  * [Overview](#overview)
+    + [Example](#example)
+  * [Engine](#engine)
+  * [Fact](#fact)
+  * [Closures](#closures)
+    + [Provided closures](#provided-closures)
+      - [Parameterizable closures](#parameterizable-closures)
+      - [Parameterless closures (syntax sugar)](#parameterless-closures-syntax-sugar)
+    + [Rules](#rules)
+    + [Closure arrays (reduce)](#closure-arrays-reduce)
+    + [Rules flow](#rules-flow)
 
-## Example
+### Example
 This very naive example on how to create an small rule engine to process online
 orders. This isn't meant to imitate a full business process, neither to shown
 the full potential of Rules.JS.
