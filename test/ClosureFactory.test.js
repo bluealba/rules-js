@@ -20,47 +20,35 @@ describe("ClosureFactory", () => {
 	describe("addNamedClosure", () => {
 
 		it("should fail if an closure with the given name is already defined", () => {
-			engine.closures.addNamedClosureImpl("true", trueFn);
-			(() => engine.closures.addNamedClosureImpl("true", trueFn)).should.throw();
+			engine.closures.addProvidedClosureImpl("true", trueFn);
+			(() => engine.closures.addProvidedClosureImpl("true", trueFn)).should.throw();
 		});
 
 		it("should fail if an closure is not a function", () => {
-			(() => engine.closures.addNamedClosureImpl("true", "something")).should.throw();
-		});
-
-		it("should register closure function and validator", () => {
-			engine.closures.addNamedClosureImpl("true", trueFn);
-
-			engine.closures.getNamedClosureImpl("true").should.have.property("fn").that.is.a("function");
-			engine.closures.getNamedClosureImpl("true").should.have.property("fn").that.equals(trueFn);
-
-			engine.closures.getNamedClosureImpl("true").should.have.property("validator").that.is.a("function");
+			(() => engine.closures.addProvidedClosureImpl("true", "something")).should.throw();
 		});
 
 	});
 
-	describe("getNamedClosureImpl().validator", () => {
+	describe("createProvidedClosure()", () => {
 
-		it("should do nothing for not paremeterized closures", () => {
-			engine.closures.addNamedClosureImpl("true", trueFn);
-			engine.closures.getNamedClosureImpl("true").validator({}); //does nothing
+		it("shouldn't do any validation for parameterless closures", () => {
+			engine.closures.addProvidedClosureImpl("true", trueFn);
+			engine.closures.createProvidedClosure("true"); //does nothing
 		});
 
-		it("should do nothing if required parameters are provided", () => {
-			engine.closures.addNamedClosureImpl("true", trueFn, { requiredParameters: ["field", "value"] });
-			engine.closures.getNamedClosureImpl("true").validator({
-				field: "foo",
-				value: "bar"
-			});
+		it("shouln't fail if required parmeters are provided ", () => {
+			engine.closures.addProvidedClosureImpl("equal", trueFn, { requiredParameters: ["field", "value"] });
+			engine.closures.createProvidedClosure({ "closure": "equal", "field": "foo", "value": "bar" });
 		});
 
 		it("should fail if implementation does not exists", () => {
-			(() => engine.closures.getNamedClosureImpl("true")).should.throw();
+			(() => engine.closures.createProvidedClosure("true")).should.throw();
 		});
 
 		it("should fail if any of required parameters is missing", () => {
-			engine.closures.addNamedClosureImpl("true", trueFn, { requiredParameters: ["field", "name"] });
-			(() => engine.closures.getNamedClosureImpl("true").validator({ field: "foo" })).should.throw();
+			engine.closures.addProvidedClosureImpl("equal", trueFn, { requiredParameters: ["field", "value"] });
+			(() => engine.closures.createProvidedClosure({ "closure": "equal", "field": "foo" })).should.throw();
 		});
 
 	});
