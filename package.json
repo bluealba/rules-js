@@ -1,6 +1,6 @@
 {
   "name": "rules-js",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A simple rule-engine for javascript",
   "main": "index.js",
   "author": "Claudio Fernandez <claudio.fernandez@bluealba.com>",
