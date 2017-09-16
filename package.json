@@ -17,6 +17,7 @@
     "coveralls": "^2.13.1",
     "csv-parse": "^1.2.0",
     "eslint": "^4.5.0",
+    "markdown-toc": "^1.1.0",
     "mocha": "^3.5.0",
     "nyc": "^11.0.3",
     "sinon": "^3.2.1"
