@@ -9,7 +9,7 @@ chai.use(chaiPromised);
 
 const trueFn = () => true
 
-describe("ClosureFactory", () => {
+describe("ClosureRegistry", () => {
 
 	let engine
 
@@ -34,21 +34,21 @@ describe("ClosureFactory", () => {
 
 		it("shouldn't do any validation for parameterless closures", () => {
 			engine.closures.addProvidedClosureImpl("true", trueFn);
-			engine.closures.createProvidedClosure("true"); //does nothing
+			engine.closures._createNamedClosure("true"); //does nothing
 		});
 
 		it("shouln't fail if required parmeters are provided ", () => {
 			engine.closures.addProvidedClosureImpl("equal", trueFn, { requiredParameters: ["field", "value"] });
-			engine.closures.createProvidedClosure({ "closure": "equal", "field": "foo", "value": "bar" });
+			engine.closures._createNamedClosure({ "closure": "equal", "field": "foo", "value": "bar" });
 		});
 
 		it("should fail if implementation does not exists", () => {
-			(() => engine.closures.createProvidedClosure("true")).should.throw();
+			(() => engine.closures._createNamedClosure("true")).should.throw();
 		});
 
 		it("should fail if any of required parameters is missing", () => {
 			engine.closures.addProvidedClosureImpl("equal", trueFn, { requiredParameters: ["field", "value"] });
-			(() => engine.closures.createProvidedClosure({ "closure": "equal", "field": "foo" })).should.throw();
+			(() => engine.closures._createNamedClosure({ "closure": "equal", "field": "foo" })).should.throw();
 		});
 
 	});

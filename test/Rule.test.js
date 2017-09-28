@@ -56,7 +56,7 @@ describe("Rule", () => {
 		let rule;
 
 		beforeEach(() => {
-			engine.closures.addProvidedClosureImpl("setFoo", (fact, parameters) => {
+			engine.closures.addProvidedClosureImpl("setFoo", (fact, { parameters }) => {
 				fact.foo = parameters.value;
 				return fact;
 			}, { requiredParameters: ["value"] });
@@ -100,7 +100,7 @@ describe("Rule", () => {
 		let rule;
 
 		beforeEach(() => {
-			engine.closures.addProvidedClosureImpl("newFact", (fact, parameters) => {
+			engine.closures.addProvidedClosureImpl("newFact", (fact, { parameters }) => {
 				return fact + parameters.value; //concatenates fact value with parameter value
 			}, { requiredParameters: ["value"] });
 
@@ -127,7 +127,7 @@ describe("Rule", () => {
 				return fact.body; //extracts the body out of the fact
 			});
 
-			engine.closures.addProvidedClosureImpl("newFact", (fact, parameters) => {
+			engine.closures.addProvidedClosureImpl("newFact", (fact, { parameters }) => {
 				return fact + parameters.value; //concatenates fact value with parameter value
 			}, { requiredParameters: ["value"] });
 
@@ -156,7 +156,7 @@ describe("Rule", () => {
 				return fact.testField; //extracts the testField out of the fact, it becomes the new fact!
 			});
 
-			engine.closures.addProvidedClosureImpl("setFoo", (fact, parameters) => {
+			engine.closures.addProvidedClosureImpl("setFoo", (fact, { parameters }) => {
 				fact.foo = parameters.value;
 				return fact;
 			}, { requiredParameters: ["value"] });
@@ -197,7 +197,7 @@ describe("Rule", () => {
 		let rule;
 
 		beforeEach(() => {
-			engine.closures.addProvidedClosureImpl("setFoo", (fact, parameters) => {
+			engine.closures.addProvidedClosureImpl("setFoo", (fact, { parameters }) => {
 				fact.foo = parameters.value;
 				return fact;
 			}, { requiredParameters: ["value"] });
@@ -247,7 +247,7 @@ describe("Rule", () => {
 		let rule;
 
 		beforeEach(() => {
-			engine.closures.addProvidedClosureImpl("setFoo", (fact, parameters) => {
+			engine.closures.addProvidedClosureImpl("setFoo", (fact, { parameters }) => {
 				fact.foo = parameters.value;
 				return fact;
 			}, { requiredParameters: ["value"] });
@@ -303,7 +303,7 @@ describe("Rule", () => {
 		let rule;
 
 		beforeEach(() => {
-			engine.closures.addProvidedClosureImpl("setFoo", (fact, parameters) => {
+			engine.closures.addProvidedClosureImpl("setFoo", (fact, { parameters }) => {
 				fact.foo = parameters.value;
 				return fact;
 			}, { requiredParameters: ["value"] });
@@ -339,7 +339,7 @@ describe("Rule", () => {
 	describe("misconfigured rules", () => {
 
 		it("should fail if required parameter of action/condition is not provided", () => {
-			engine.closures.addProvidedClosureImpl("setFoo", (fact, parameters) => {
+			engine.closures.addProvidedClosureImpl("setFoo", (fact, { parameters }) => {
 				fact.foo = parameters.value;
 				return fact;
 			}, { requiredParameters: ["value"] });

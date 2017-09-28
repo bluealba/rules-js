@@ -11,7 +11,7 @@ module.exports = {
 		"strict": [2, "global"],
 		"quotes": [2, "double", "avoid-escape"],
 		"indent": [1, "tab"],
-		"no-unused-vars": 1
+		"no-unused-vars": [1, {"args": "none"}]
 	},
 	"globals": {
 	}
