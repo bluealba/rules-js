@@ -1,19 +1,19 @@
 {
-  "name": "simple-commissions",
+  "name": "simple-rules",
 
   "rules": [
 		{
-			"name": "CalculateCost for all products",
+			"description": "CalculateCost for all products",
       "when": { "closure": "always" },
       "then": { "closure": "setCost" }
     },
     {
-			"name": "Set commissions for Equities",
+			"description": "Set commissions for Equities",
       "when": { "closure": "productTypeCondition", "productType": "Equity" },
       "then": { "closure": "setPercentualCommission", "percentualPoints": 1 }
     },
 		{
-			"name": "Set commissions for Options",
+			"description": "Set commissions for Options",
       "when": { "closure": "productTypeCondition", "productType": "Option" },
 			"then": { "closure": "setPercentualCommission", "percentualPoints": 1.25 }
     }
