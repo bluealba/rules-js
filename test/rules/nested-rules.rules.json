@@ -3,28 +3,28 @@
 
   "rules": [
 		{
-			"name": "CalculateCost for all products",
+			"description": "CalculateCost for all products",
       "when": { "closure": "always" },
       "then": { "closure": "setCost" }
     },
     {
-			"name": "Set commissions for Equities",
+			"description": "Set commissions for Equities",
       "when": { "closure": "equal", "field": "productType", "value": "Equity" },
       "then": { "closure": "setPercentualCommission", "percentualPoints": 1 }
     },
 		{
-			"name": "Set commissions for Options",
+			"description": "Set commissions for Options",
       "when": { "closure": "equal", "field": "productType", "value": "Option" },
 			"then": {
-				"name": "nested rule evaluation for options",
+				"description": "nested rule evaluation for options",
 				"rules": [
 					{
-						"name": "On Call options",
+						"description": "On Call options",
 			      "when": { "closure": "equal", "field": "optionType", "value": "Call" },
 			      "then": { "closure": "setPercentualCommission", "percentualPoints": 1.1 }
 			    },
 					{
-						"name": "On Put options",
+						"description": "On Put options",
 						"when": { "closure": "equal", "field": "optionType", "value": "Put" },
 						"then": { "closure": "setPercentualCommission", "percentualPoints": 0.9 }
 					}

@@ -67,15 +67,15 @@ engine.  We can do it inside a js module:
 ```javascript
 const engine = new Engine();
 
-// We are missing something here:
+// We are intentionally missing something here:
 // We need first to define what the verbs 'checkStockLocation', 'calculateTaxes'
 // 'calculateShipping' and 'createDispatchOrder' actually mean
 
 const definitions = require("./process-orders.rules.json");
-const ruleFlow = engine.closures.create(definitions);
+engine.add(definitions);
 
 module.exports = function (order) {
-	return engine.process(ruleFlow, order);
+	return engine.process("process-orders", order);
 }
 ```
 
@@ -115,13 +115,13 @@ Lets define some of such missing verbs:
 
 ```javascript
 //...
-engine.closures.addProvidedClosureImpl("calculateTotalPrice", (fact, parameters, context)) => {
+engine.closures.addProvidedClosureImpl("calculateTotalPrice", (fact, context)) => {
 	fact.totalPrice = fact.books.reduce((totalPrice, book) => totalPrice + book.price, 0);
 	return fact;
 });
 
-engine.closures.addProvidedClosureImpl("calculateTaxes", (fact, parameters, context)) => {
-	fact.taxes = fact.totalPrice * parameters.salesTax;
+engine.closures.addProvidedClosureImpl("calculateTaxes", (fact, context)) => {
+	fact.taxes = fact.totalPrice * context.parameters.salesTax;
 	return fact;
 }, { requiredParameters: ["salesTax"] });
 
@@ -134,7 +134,8 @@ This is the main entry point for Rules.js.  The typically lifecycle of a rule en
 
 1. Instantiate the rule engine.  This instance will be kept alive during the whole life of the application.
 2. Configure the engine provided closures.
-3. Load some rule flow definition file.
+3. Configure the engine with high-level closures (rules, ruleflows). This is usually done by requiring a
+	 rule-flow definition file 
 4. Evaluate multiple facts using the engine and obtain a result for each one of them.
 
 ```javascript
@@ -144,22 +145,22 @@ const Engine = require("rules-js");
 const engine = new Engine();
 
 // 2. configure
-engine.closures.addProvidedClosureImpl("calculateTotalPrice", (fact, parameters, context)) => {
+engine.closures.addProvidedClosureImpl("calculateTotalPrice", (fact, context)) => {
 	fact.totalPrice = fact.books.reduce((totalPrice, book) => totalPrice + book.price, 0);
 	return fact;
 });
 
-engine.closures.addProvidedClosureImpl("calculateTaxes", (fact, parameters, context)) => {
-	fact.taxes = fact.totalPrice * parameters.salesTax;
+engine.closures.addProvidedClosureImpl("calculateTaxes", (fact, context)) => {
+	fact.taxes = fact.totalPrice * context.parameters.salesTax;
 	return fact;
 }, { requiredParameters: ["salesTax"] });
 
 const definitions = require("./process-orders.rules.json");
-const ruleFlow = engine.closures.create(definitions);
+engine.closures.create(definitions);
 
 // 3. at some time later, evaluate facts using the engine
 module.exports = function (fact) {
-	return engine.process(ruleFlow, fact);
+	return engine.process("process-orders", fact);
 }
 
 ```
@@ -182,27 +183,29 @@ the library.
 
 ```javascript
 // a simple closure impl function
-function (fact, parameters, context) {
-	return fact.totalPrice * parameters.salesTax;
+function (fact, context) {
+	return fact.totalPrice * context.parameters.salesTax;
 }
 ```
 
-Note that any closure implementation function will receive three parameters:
+Note that any closure implementation function will receive two parameters:
 ```
-@param      {Object}  fact        the fact is the object that is current being evaluated by the closure.
-@param      {Object}  parameters  a hash of closure bound parameters.
-@param      {Object}  context     the fact's execution context
-@return     {Object}              the result of the computation (this can be a Promise too!)
+@param      {Object}  fact        				the fact is the object that is current being evaluated by the closure.
+@param      {Context} context     				the fact's execution context
+@param			{Object}  context.parameters 	the execution parameters
+@param			{Engine}	context.engine			the rule engine
+
+@return     {Object}  the result of the computation (this can be a Promise too!)
 ```
 The main parameter is of course the **fact**, closures need to derive their result
-from each different fact that is provided. **parameters** hash is introduced to allow
-the reuse of closure implementations and **context** is seldom used.
+from each different fact that is provided. **context.parameters** hash is introduced 
+to allow= the reuse of closure implementations.
 
 Closures will often enhance the current provided fact by adding extra information
 to it. Of course, a closure can always alter the fact.
 
 ```javascript
-function (fact, parameters, context) {
+function (fact, context) {
 	fact.taxes = fact.totalPrice * 0.8;
 	return fact;
 }
@@ -212,8 +215,9 @@ function (fact, parameters, context) {
 is not a limitation imposed by Rules.JS
 
 We can register provided closures into a rule engine by invoking the following:
+
 ```javascript
-engine.closures.addProvidedClosureImpl("calculateTaxes", (fact, parameters, context)) => {
+engine.closures.addProvidedClosureImpl("calculateTaxes", (fact, context) => {
 	fact.taxes = fact.totalPrice * 0.08
 	return fact;
 });
@@ -236,8 +240,8 @@ code can be reused in different contexts. We can change the former `calculateTax
 to receive the tax percentage.
 
 ```javascript
-engine.closures.addProvidedClosureImpl("calculateTaxes", (fact, parameters, context)) => {
-	fact.taxes = fact.totalPrice * parameters.salesTax;
+engine.closures.addProvidedClosureImpl("calculateTaxes", (fact, context) => {
+	fact.taxes = fact.totalPrice * context.parameters.salesTax;
 	return fact;
 }, { requiredParameters: ["salesTax"] });
 ```

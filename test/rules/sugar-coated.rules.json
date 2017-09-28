@@ -1,9 +1,9 @@
 {
-  "name": "generic-set-rule-with-some-sugar",
+  "name": "sugar-coated",
 
   "rules": [
 		{
-			"name": "CalculateCost for all products",
+			"description": "CalculateCost for all products",
 			"when": "always",
 			"then": [
 				 "fetchSecurityData",
@@ -12,12 +12,12 @@
 			 ]
 		},
     {
-			"name": "Set commissions for Equities",
+			"description": "Set commissions for Equities",
       "when": { "closure": "equal", "field": "productType", "value": "Equity" },
       "then": { "closure": "setResult", "field": "commissions", "calculator": { "closure": "calculatePercentualCommission", "percentualPoints": 1 }}
     },
 		{
-			"name": "Set commissions for Options",
+			"description": "Set commissions for Options",
       "when": { "closure": "equal", "field": "productType", "value": "Option" },
 			"then": { "closure": "setResult", "field": "commissions", "calculator": { "closure": "calculatePercentualCommission", "percentualPoints": 1.25 }}
     }
