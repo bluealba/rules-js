@@ -123,7 +123,7 @@ engine.closures.addProvidedClosureImpl("calculateTotalPrice", (fact, context)) =
 engine.closures.addProvidedClosureImpl("calculateTaxes", (fact, context)) => {
 	fact.taxes = fact.totalPrice * context.parameters.salesTax;
 	return fact;
-}, { requiredParameters: ["salesTax"] });
+}, { required: ["salesTax"] });
 
 const definitions = require("./process-orders.rules.json");
 //...
@@ -153,7 +153,7 @@ engine.closures.addProvidedClosureImpl("calculateTotalPrice", (fact, context)) =
 engine.closures.addProvidedClosureImpl("calculateTaxes", (fact, context)) => {
 	fact.taxes = fact.totalPrice * context.parameters.salesTax;
 	return fact;
-}, { requiredParameters: ["salesTax"] });
+}, { required: ["salesTax"] });
 
 const definitions = require("./process-orders.rules.json");
 engine.closures.create(definitions);
@@ -243,7 +243,7 @@ to receive the tax percentage.
 engine.closures.addProvidedClosureImpl("calculateTaxes", (fact, context) => {
 	fact.taxes = fact.totalPrice * context.parameters.salesTax;
 	return fact;
-}, { requiredParameters: ["salesTax"] });
+}, { required: ["salesTax"] });
 ```
 
 Now every time that a closure is referenced in a rules file we will need to provide

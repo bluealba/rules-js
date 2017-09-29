@@ -6,7 +6,7 @@
   "author": "Claudio Fernandez <claudio.fernandez@bluealba.com>",
   "license": "ISC",
   "scripts": {
-    "test": "eslint '.' && nyc --reporter=html --reporter=text mocha",
+    "test": "eslint '.' && nyc --reporter=html --reporter=text mocha \"test/**/*.test.js\"",
     "lint": "eslint '.'",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },

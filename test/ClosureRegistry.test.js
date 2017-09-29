@@ -38,7 +38,7 @@ describe("ClosureRegistry", () => {
 		});
 
 		it("shouln't fail if required parmeters are provided ", () => {
-			engine.closures.addProvidedClosureImpl("equal", trueFn, { requiredParameters: ["field", "value"] });
+			engine.closures.addProvidedClosureImpl("equal", trueFn, { required: ["field", "value"] });
 			engine.closures._createNamedClosure({ "closure": "equal", "field": "foo", "value": "bar" });
 		});
 
@@ -47,7 +47,7 @@ describe("ClosureRegistry", () => {
 		});
 
 		it("should fail if any of required parameters is missing", () => {
-			engine.closures.addProvidedClosureImpl("equal", trueFn, { requiredParameters: ["field", "value"] });
+			engine.closures.addProvidedClosureImpl("equal", trueFn, { required: ["field", "value"] });
 			(() => engine.closures._createNamedClosure({ "closure": "equal", "field": "foo" })).should.throw();
 		});
 

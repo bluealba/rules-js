@@ -40,11 +40,11 @@ engine.closures.addProvidedClosureImpl("calculateCost", fact => {
 engine.closures.addProvidedClosureImpl("setPercentualCommission", (fact, { parameters }) => {
 	fact.commissions = fact.cost * parameters.percentualPoints / 100;
 	return fact;
-}, { requiredParameters: ["percentualPoints"] })
+}, { required: ["percentualPoints"] })
 
 //calculateCommissions - a version of setCost that returns not a fact but a simple value
 engine.closures.addProvidedClosureImpl("calculatePercentualCommission", (fact, { parameters }) => {
 	return fact.cost * parameters.percentualPoints / 100;
-}, { requiredParameters: ["percentualPoints"] })
+}, { required: ["percentualPoints"] })
 
 module.exports = engine;
