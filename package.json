@@ -6,7 +6,7 @@
   "author": "Claudio Fernandez <claudio.fernandez@bluealba.com>",
   "license": "ISC",
   "scripts": {
-    "test": "eslint '.' && nyc --reporter=html --reporter=text mocha",
+    "test": "eslint '.' && nyc --reporter=html --reporter=text mocha \"test/**/*.test.js\"",
     "lint": "eslint '.'",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
@@ -20,7 +20,8 @@
     "markdown-toc": "^1.1.0",
     "mocha": "^3.5.0",
     "nyc": "^11.0.3",
-    "sinon": "^3.2.1"
+    "sinon": "^4.0.0",
+    "sinon-chai": "^2.14.0"
   },
   "dependencies": {
     "async-class-co": "^0.4.3"

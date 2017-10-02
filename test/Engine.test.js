@@ -1,17 +1,17 @@
 "use strict";
 
 const chai = require("chai"),
-	engine = require("./rules"),
+	engine = require("./flows"),
 	chaiPromised = require("chai-as-promised");
 
 chai.should();
 chai.use(chaiPromised);
 
 function createRuleFlow(name) {
-	engine.add(require(`./rules/${name}.rules.json`), true);
+	engine.add(require(`./flows/${name}.flow.json`), { override: true });
 }
 
-describe("RuleFlow", () => {
+describe("Engine", () => {
 
 	beforeEach(() => {
 		engine.context.securityMasterSevice = {
@@ -75,34 +75,18 @@ describe("RuleFlow", () => {
 		});
 	});
 
-	describe("default action should be invoked if no rule evaluates before it", () => {
-		beforeEach(() => {
-			createRuleFlow("default-rule");
-		});
-
-		it("should execute the rules that matches condition A (equities)", () => {
-			const result = engine.process("default-rule", { productType: "Equity", cost: 100 });
-			return result.should.eventually.have.property("fact").that.has.property("commissions", 1);
-		});
-
-		it("should execute default rule", () => {
-			const result = engine.process("default-rule", { productType: "Other" });
-			return result.should.be.rejectedWith(Error, "Unrecognized product");
-		});
-	});
-
 	describe("default should be local to nested flow", () => {
 		beforeEach(() => {
-			createRuleFlow("nested-rules-with-default");
+			createRuleFlow("default-condition");
 		});
 
 		it("should execute the rules that matches condition B.A (call options)", () => {
-			const result = engine.process("nested-rules-with-default", { productType: "Option", price: 20, quantity: 5, optionType: "Call" });
+			const result = engine.process("default-condition", { productType: "Option", price: 20, quantity: 5, optionType: "Call" });
 			return result.should.eventually.have.property("fact").that.has.property("commissions", 1.1);
 		});
 
 		it("should execute the default rule", () => {
-			const result = engine.process("nested-rules-with-default", { productType: "Option", price: 20, quantity: 5, optionType: "Other" });
+			const result = engine.process("default-condition", { productType: "Option", price: 20, quantity: 5, optionType: "Other" });
 			return result.should.be.rejectedWith(Error, "Unrecognized optionType");
 		});
 	});
