@@ -124,7 +124,7 @@ or
 
 ```javascript
 class CalculateTotalPrize extends Closure {
-	process(fact, context) {
+	do(fact, context) {
 		fact.totalPrice = fact.books.reduce((total, book) => total + book.price, 0);
 		return fact;
 	} 
@@ -193,7 +193,7 @@ function (fact, context) {
 
 //the same thing implemented through a class
 class TaxCalculator extends Closure {
-	process(fact, context) {
+	do(fact, context) {
 		return fact.totalPrice * context.parameters.salesTax;
 	}
 }
