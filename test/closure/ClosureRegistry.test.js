@@ -47,6 +47,32 @@ describe("ClosureRegistry", () => {
 			result.fact.should.be.true;
 		});
 
+	});
+
+	describe("add (with Closure class)", () => {
+		const TrueClosure = class {
+			do(fact, context) {
+				return true;
+			}
+		}
+		const FalseClosure = class {
+			do(fact, context) {
+				return false;
+			}
+		}
+
+		it("should fail if an closure with the given name is already defined", () => {
+			registry.add("true", FalseClosure);
+			(() => registry.add("true", TrueClosure)).should.throw();
+		});
+
+		it("should replace a closure if override option is provided", function* () {
+			registry.add("true", FalseClosure);
+			registry.add("true", TrueClosure, { override: true });
+
+			const result = yield registry.get("true").process("foo", context());
+			result.fact.should.be.true;
+		});
 
 	});
 
