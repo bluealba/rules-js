@@ -1,18 +1,18 @@
 "use strict";
 
-const ProvidedClosure = require("../../lib/closure/ProvidedClosure"),
+const FunctionalClosure = require("../../lib/closure/FunctionalClosure"),
 	chaiPromised = require("chai-as-promised"),
 	chai = require("chai");
 
 chai.should();
 chai.use(chaiPromised);
 
-describe("ProvidedClosure", () => {
+describe("FunctionalClosure", () => {
 
 	let closure;
 
 	it("should have name", () => {
-		closure = new ProvidedClosure("some-closure", () => true);
+		closure = new FunctionalClosure("some-closure", () => true);
 		closure.should.have.property("name").equal("some-closure");
 	});
 
@@ -20,14 +20,14 @@ describe("ProvidedClosure", () => {
 		const context = context();
 		context.suffix = "bar";
 
-		closure = new ProvidedClosure("some-closure", (fact, context) => fact + context.suffix);
+		closure = new FunctionalClosure("some-closure", (fact, context) => fact + context.suffix);
 		const result = yield closure.process("foo", context);
 		result.fact.should.equal("foobar")
 	});
 
 	describe("with no parameters", () => {
 		beforeEach(() => {
-			closure = new ProvidedClosure("some-closure", (fact, context) => fact + "bar");
+			closure = new FunctionalClosure("some-closure", (fact, context) => fact + "bar");
 		});
 
 		it("should execute the associated function when invoked", function* () {
@@ -38,7 +38,7 @@ describe("ProvidedClosure", () => {
 
 	describe("with required parameters", () => {
 		beforeEach(() => {
-			closure = new ProvidedClosure("some-closure", (fact, context) => fact + context.parameters.suffix, { required: ["suffix"] });
+			closure = new FunctionalClosure("some-closure", (fact, context) => fact + context.parameters.suffix, { required: ["suffix"] });
 		});
 
 		it.skip("should fail when executed unbounded", () => {
@@ -59,7 +59,7 @@ describe("ProvidedClosure", () => {
 
 	describe("with optional parameters", () => {
 		beforeEach(() => {
-			closure = new ProvidedClosure("some-closure", (fact, context) => fact + context.parameters.suffix);
+			closure = new FunctionalClosure("some-closure", (fact, context) => fact + context.parameters.suffix);
 		});
 
 		it("should work when executed unbounded", function* () {
@@ -80,6 +80,12 @@ describe("ProvidedClosure", () => {
 		});
 
 	});
+
+	it("should fail if not built with a function", () => {
+		(() => new FunctionalClosure("name", undefined)).should.throw();
+		(() => new FunctionalClosure("name", "this is not a function")).should.throw();
+	});
+
 
 });
 
