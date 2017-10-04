@@ -113,4 +113,20 @@ describe("Engine", () => {
 		});
 	});
 
+	describe("a date-ranged closure executed", () => {
+		beforeEach(() => {
+			createRuleFlow("date-ranged-rules");
+		});
+
+		it(" for a fact inside the specified range inner closures are executed properly by rules", () => {
+			const result = engine.process("date-ranged-rules", { productType: "Equity", price: 20, quantity: 5, date: "2017-01-28" });
+			return result.should.eventually.have.property("fact").that.has.property("cost", 100);
+		});
+
+		it(" for a fact outside the specified range inner closures are not executed", () => {
+			const result = engine.process("date-ranged-rules", { productType: "Equity", price: 20, quantity: 5, date: "2017-01-31" });
+			return result.should.eventually.have.property("fact").that.has.not.property("cost");
+		});
+	});
+
 });

@@ -24,7 +24,8 @@
     "sinon-chai": "^2.14.0"
   },
   "dependencies": {
-    "async-class-co": "^0.4.3"
+    "async-class-co": "^0.4.3",
+    "moment": "^2.18.1"
   },
   "repository": {
     "closure": "git",

@@ -1,0 +1,13 @@
+{
+  "name": "date-ranged-rules",
+
+  "rules": [
+		{
+			"description": "CalculateCost for all products on a given date range",
+			"start": "2017-01-27",
+			"end": "2017-01-29",
+			"when": { "closure": "always"},
+      "then": { "closure": "setCost" }
+    }
+  ]
+}
