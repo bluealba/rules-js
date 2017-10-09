@@ -1,5 +1,6 @@
 "use strict";
 const FunctionalClosure = require("../../lib/closure/FunctionalClosure"),
+	Rule = require("../../lib/closure/Rule"),
 	RuleFlow = require("../../lib/closure/RuleFlow"),
 	Context = require("../../lib/Context"),
 	chai = require("chai"),
@@ -14,13 +15,14 @@ chai.use(sinonChai);
 describe("RuleFlow", () => {
 	let flow;
 
-	const appendFoo = new FunctionalClosure("appendFoo", fact => fact + "foo");
-	const appendBaz = new FunctionalClosure("appendFoo", fact => fact + "baz");
-	const appendZoo = new FunctionalClosure("appendZoo", fact => fact + "zoo");
-	const raiseError = new FunctionalClosure("appendFoo", fact => { throw new Error("expected") });
+	const noop = new Rule("rule-name", new FunctionalClosure("never", fact => false), new FunctionalClosure("appendBoo", fact => fact + "boo"));
+	const appendFoo = new Rule("rule-name", new FunctionalClosure("always", fact => true), new FunctionalClosure("appendFoo", fact => fact + "foo"));
+	const appendBaz = new Rule("rule-name", new FunctionalClosure("always", fact => true), new FunctionalClosure("appendBaz", fact => fact + "baz"));
+	const appendZoo = new Rule("rule-name", new FunctionalClosure("always", fact => true), new FunctionalClosure("appendZoo", fact => fact + "zoo"));
+	const raiseError = new FunctionalClosure("raise", fact => { throw new Error("expected") });
 
 	beforeEach(() => {
-		flow = new RuleFlow("flow-name", [appendFoo, appendBaz, appendZoo]);
+		flow = new RuleFlow("flow-name", [noop, appendFoo, appendBaz, appendZoo]);
 	});
 
 	it("should have name", () => {
@@ -30,6 +32,12 @@ describe("RuleFlow", () => {
 	it("should reduce the provided fact across the whole chain of closures", function* () {
 		const result = yield flow.process("bar", context());
 		result.fact.should.be.equal("bar" + "foo" + "baz" + "zoo");
+	})
+
+	it("should short circuit if match once is activated", function* () {
+		flow.options.matchOnce = true;
+		const result = yield flow.process("bar", context());
+		result.fact.should.be.equal("bar" + "foo");
 	})
 
 	it("should notify context of start / end of the flow", function* () {
