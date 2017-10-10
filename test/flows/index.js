@@ -13,7 +13,7 @@ engine.closures.add("productTypeCondition", (fact, context) => {
 
 //setQuantity
 engine.closures.add("fetchSecurityData", (fact, context) => {
-	const securityPromise = context.securityMasterSevice.fetch(fact.security);
+	const securityPromise = context.engine.services.securityMasterService.fetch(fact.security);
 	return securityPromise.then(security => {
 		fact.security = security; //replaces security with full blown object
 		return fact;

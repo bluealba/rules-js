@@ -14,7 +14,7 @@ function createRuleFlow(name) {
 describe("Engine", () => {
 
 	beforeEach(() => {
-		engine.context.securityMasterSevice = {
+		engine.services.securityMasterService = {
 			fetch(securityId) {
 				return Promise.resolve({ id: securityId, contractSize: 2})
 			}
