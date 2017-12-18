@@ -30,26 +30,28 @@ describe("Rule", () => {
 	});
 
 	describe("when condition is met", () => {
-		it("can be invoked and return the new fact", function* () {
-			const result = yield rule.process("bar", context());
+		it("can be invoked and return the new fact", () => {
+			const result = rule.process("bar", context());
 			result.should.equal("barfoo");
 		});
 
-		it("should add itself to context.rulesFired", function* () {
-			const result = yield rule.process("bar", context());
-			result.context.rulesFired.should.have.lengthOf(1);
+		it("should add itself to context.rulesFired", () => {
+			const ctx = context();
+			rule.process("bar", ctx);
+			ctx.rulesFired.should.have.lengthOf(1);
 		});
 	});
 
 	describe("when condition is not met", () => {
-		it("fact remains unchanged", function* () {
-			const result = yield rule.process("zoo", context());
+		it("fact remains unchanged", () => {
+			const result = rule.process("zoo", context());
 			result.should.equal("zoo");
 		});
 
-		it("shouldn't add itself to context.rulesFired", function* () {
-			const result = yield rule.process("zoo", context());
-			result.context.rulesFired.should.have.lengthOf(0);
+		it("shouldn't add itself to context.rulesFired", () => {
+			const ctx = context()
+			rule.process("zoo", ctx);
+			ctx.rulesFired.should.have.lengthOf(0);
 		});
 	});
 
@@ -59,7 +61,7 @@ describe("Rule", () => {
 		});
 
 		it("error gets propagated", () => {
-			return rule.process("bar", context()).should.be.rejected;
+			(() => rule.process("bar", context())).should.throw();
 		});
 	});
 
@@ -69,7 +71,7 @@ describe("Rule", () => {
 		});
 
 		it("error gets propagated", () => {
-			return rule.process("bar", context()).should.be.rejected;
+			(() => rule.process("bar", context())).should.throw();
 		});
 	});
 
@@ -77,18 +79,18 @@ describe("Rule", () => {
 		const whenData = new FunctionalClosure("whenData", (fact, context) => fact === context.parameters.data);
 		const appendData = new FunctionalClosure("appendData", (fact, context) => fact + context.parameters.suffix);
 
-		it("they should be forwarded to inner action closure", function* () {
+		it("they should be forwarded to inner action closure", () => {
 			rule = new Rule("rule-name", whenBar, appendData);
 			rule = rule.bind(null, { suffix: "foo" })
-			const result = yield rule.process("bar", context())
-			result.should.equal("foobar");
+			const result = rule.process("bar", context())
+			result.should.equal("barfoo");
 		});
 
-		it("they should be forwarded to inner condition closure", function* () {
+		it("they should be forwarded to inner condition closure", () => {
 			rule = new Rule("rule-name", whenData, appendFoo);
 			rule = rule.bind(null, { data: "bar" })
-			const result = yield rule.process("bar", context())
-			result.should.equal("foobar");
+			const result = rule.process("bar", context())
+			result.should.equal("barfoo");
 		});
 	});
 
