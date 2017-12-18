@@ -2,7 +2,8 @@
 
 const FunctionalClosure = require("../../lib/closure/FunctionalClosure"),
 	chaiPromised = require("chai-as-promised"),
-	chai = require("chai");
+	chai = require("chai"),
+	Context = require("../../lib/Context")
 
 chai.should();
 chai.use(chaiPromised);
@@ -16,13 +17,13 @@ describe("FunctionalClosure", () => {
 		closure.should.have.property("name").equal("some-closure");
 	});
 
-	it("should pass execution context to function", function* () {
-		const context = context();
-		context.suffix = "bar";
+	it("should pass execution context to function", () => {
+		const ctx = context();
+		ctx.suffix = "bar";
 
-		closure = new FunctionalClosure("some-closure", (fact, context) => fact + context.suffix);
-		const result = yield closure.process("foo", context);
-		result.fact.should.equal("foobar")
+		closure = new FunctionalClosure("some-closure", (fact, ctx) => fact + ctx.suffix);
+		const result = closure.process("foo", ctx);
+		result.should.equal("foobar")
 	});
 
 	describe("with no parameters", () => {
@@ -30,9 +31,9 @@ describe("FunctionalClosure", () => {
 			closure = new FunctionalClosure("some-closure", (fact, context) => fact + "bar");
 		});
 
-		it("should execute the associated function when invoked", function* () {
-			const result = yield closure.process("foo", context());
-			result.fact.should.equal("foobar");
+		it("should execute the associated function when invoked", () => {
+			const result = closure.process("foo", context());
+			result.should.equal("foobar");
 		});
 	});
 
@@ -49,10 +50,10 @@ describe("FunctionalClosure", () => {
 			(() => closure.bind(null, {})).should.throw();
 		});
 
-		it("should use parameter to resolve result", function* () {
+		it("should use parameter to resolve result", () => {
 			closure = closure.bind(null, { suffix: "foo" });
-			const result = yield closure.process("foo", context());
-			result.fact.should.equal("foofoo");
+			const result = closure.process("foo", context());
+			result.should.equal("foofoo");
 		});
 
 	});
@@ -62,21 +63,21 @@ describe("FunctionalClosure", () => {
 			closure = new FunctionalClosure("some-closure", (fact, context) => fact + context.parameters.suffix);
 		});
 
-		it("should work when executed unbounded", function* () {
-			const result = yield closure.process("foo", context());
-			result.fact.should.equal("fooundefined");
+		it("should work when executed unbounded", () => {
+			const result = closure.process("foo", context());
+			result.should.equal("fooundefined");
 		});
 
-		it("should work when binding but parameter not provided", function* () {
+		it("should work when binding but parameter not provided", () => {
 			closure = closure.bind(null, { });
-			const result = yield closure.process("foo", context());
-			result.fact.should.equal("fooundefined");
+			const result = closure.process("foo", context());
+			result.should.equal("fooundefined");
 		});
 
-		it("should use parameter to resolve result", function* () {
+		it("should use parameter to resolve result", () => {
 			closure = closure.bind(null, { suffix: "foo" });
-			const result = yield closure.process("foo", context());
-			result.fact.should.equal("foofoo");
+			const result = closure.process("foo", context());
+			result.should.equal("foofoo");
 		});
 
 	});
@@ -86,11 +87,8 @@ describe("FunctionalClosure", () => {
 		(() => new FunctionalClosure("name", "this is not a function")).should.throw();
 	});
 
-
 });
 
 function context() {
-	return {
-		parameters: {}
-	};
+	return new Context();
 }

@@ -24,25 +24,25 @@ describe("ClosureReducer", () => {
 		reducer.name.should.equal("reducer-name");
 	})
 
-	it("should reduce the provided fact across the whole chain of closures", function* () {
-		const result = yield reducer.process("bar", context());
-		result.fact.should.be.equal("bar" + "foo" + "baz" + "zoo");
+	it("should reduce the provided fact across the whole chain of closures", () => {
+		const result = reducer.process("bar", context());
+		result.should.be.equal("bar" + "foo" + "baz" + "zoo");
 	})
 
 	it("should propagate the error if any closure in the chain fails", () => {
 		reducer = new ClosureReducer("reducer-name", [appendFoo, raiseError, appendZoo]);
-		return reducer.process("bar", context()).should.be.rejected;
+		(() => reducer.process("bar", context())).should.throw
 	})
 
 	describe("when bound to parameters", () => {
 		const appendSuffix = new FunctionalClosure("appendSuffix", (fact, context) => fact + context.parameters.suffix);
 
-		it("parameters should be propagated to all closures in the chain", function* () {
+		it("parameters should be propagated to all closures in the chain", () => {
 			reducer = new ClosureReducer("reducer-name", [appendSuffix, appendSuffix, appendZoo]);
 			reducer = reducer.bind(null, { suffix: "foo" });
 
-			const result = yield reducer.process("bar", context());
-			result.fact.should.be.equal("bar" + "foo" + "foo" + "zoo");
+			const result = reducer.process("bar", context());
+			result.should.be.equal("bar" + "foo" + "foo" + "zoo");
 		});
 	});
 
