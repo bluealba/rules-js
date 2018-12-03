@@ -48,4 +48,15 @@ engine.closures.add("calculatePercentualCommission", (fact, context) => {
 	return fact.cost * context.parameters.percentualPoints / 100;
 }, { required: ["percentualPoints"] })
 
+//addToPrice - add to fact.price the amount indicated in a parameter
+engine.closures.add("addToPrice", (fact, context) => {
+	fact.price += context.parameters.amount;
+	return fact;
+}, { required: ["amount"] })
+
+//saleDate - simple field extractor
+engine.closures.add("saleDate", (fact, context) => {
+	return fact.saleDate;
+})
+
 module.exports = engine;

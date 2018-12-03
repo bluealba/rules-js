@@ -113,4 +113,30 @@ describe("Engine", () => {
 		});
 	});
 
+	describe("date range defined in a JSON file filters as expected", () => {
+		beforeEach(() => {
+			createRuleFlow("date-range");
+		});
+
+		it("fact with date not matched for any rule is not affected", () => {
+			const result = engine.process("date-range-rules", { saleDate: "2018-05-21", price: 10 });
+			return result.should.eventually.have.property("fact").that.has.property("price").equal(10);
+		});
+
+		it("fact with date that matches a range is affected - 1", () => {
+			const resultSeptember = engine.process("date-range-rules", { saleDate: "2018-09-21", price: 10 });
+			return resultSeptember.should.eventually.have.property("fact").that.has.property("price").equal(12)
+		});
+
+		it("fact with date that matches a range is affected - 2", () => {
+			const resultOctober = engine.process("date-range-rules", { saleDate: "2018-10-21", price: 10 });
+			return resultOctober.should.eventually.have.property("fact").that.has.property("price").equal(13)
+		});
+
+		it("fact with date that matches a from-only-date range is affected", () => {
+			const result2019 = engine.process("date-range-rules", { saleDate: "2019-03-21", price: 10 });
+			return result2019.should.eventually.have.property("fact").that.has.property("price").equal(14)
+		});
+	});
+
 });

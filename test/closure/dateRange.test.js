@@ -46,21 +46,21 @@ describe("dateRange", () => {
 		})
 
 		it("should process on date after dateFrom", () => {
-			const fact = { saleDate: niceDate(2018, 10, 15), price: 10 }
+			const fact = { saleDate: "2018-10-15", price: 10 }
 			const newFact = rule.process(fact, context())
 			newFact.should.not.be.null
 			newFact.price.should.equal(11)
 		});
 
 		it("should process on date on dateFrom", () => {
-			const fact = { saleDate: niceDate(2018, 9, 1), price: 10 }
+			const fact = { saleDate: "2018-09-01", price: 10 }
 			const newFact = rule.process(fact, context())
 			newFact.should.not.be.null
 			newFact.price.should.equal(11)
 		});
 
 		it("should not process before date on dateFrom", () => {
-			const fact = { saleDate: niceDate(2018, 7, 21), price: 10 }
+			const fact = { saleDate: "2018-07-21", price: 10 }
 			const newFact = rule.process(fact, context())
 			newFact.should.not.be.null
 			newFact.price.should.equal(10)

@@ -1,0 +1,21 @@
+{
+  "name": "date-range-rules",
+
+  "rules": [
+		{
+			"description": "add 2 to price for September 2018",
+      "when": { "closure": "dateRange", "dateFrom": "2018-09-01", "dateTo": "2018-09-30", "dateExtractor": "saleDate" },
+      "then": { "closure": "addToPrice", "amount": 2 }
+    },
+    {
+			"description": "add 3 to price for October 2018",
+      "when": { "closure": "dateRange", "dateFrom": "2018-10-01", "dateTo": "2018-10-31", "dateExtractor": "saleDate" },
+      "then": { "closure": "addToPrice", "amount": 3 }
+    },
+		{
+			"description": "add 4 to price from November 2018 on",
+      "when": { "closure": "dateRange", "dateFrom": "2018-11-01", "dateExtractor": "saleDate" },
+      "then": { "closure": "addToPrice", "amount": 4 }
+    }
+  ]
+}
