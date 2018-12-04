@@ -145,15 +145,16 @@ describe("Engine", () => {
 		});
 
 		it("should use 'and' strategy as default", () => {
-
+			const result = engine.process("conditional-reducers", { price: 10, quantity: 2 })
+			return result.should.eventually.have.property("fact").with.property("price").equal(20);
 		});
 
 		it("should accept 'and' as conditionalStrategy and return true if both are true", () => {
-
+			return true;
 		});
 
 		it("should accept 'or' as conditionalStrategy and return true if either are true", () => {
-
+			return true;
 		});
 	})
 

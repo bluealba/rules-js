@@ -1,0 +1,12 @@
+{
+	"name": "conditional-reducers",
+	"rules": [
+		{
+			"when": [
+				{ "closure": "equal", "field": "price", "value": 10 },
+				{ "closure": "equal", "field": "quantity", "value": 2 }
+			],
+			"then": { "closure": "addToPrice", "amount": 10 }
+		}
+	]
+}
