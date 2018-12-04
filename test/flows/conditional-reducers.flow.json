@@ -4,9 +4,25 @@
 		{
 			"when": [
 				{ "closure": "equal", "field": "price", "value": 10 },
-				{ "closure": "equal", "field": "quantity", "value": 2 }
+				{ "closure": "equal", "field": "quantity", "value": 5 }
 			],
 			"then": { "closure": "addToPrice", "amount": 10 }
+		},
+		{
+			"conditionStrategy": "and",
+			"when": [
+				{ "closure": "equal", "field": "price", "value": 20 },
+				{ "closure": "equal", "field": "quantity", "value": 10 }
+			],
+			"then": { "closure": "addToPrice", "amount": 100 }
+		},
+		{
+			"conditionStrategy": "or",
+			"when": [
+				{ "closure": "equal", "field": "price", "value": 30 },
+				{ "closure": "equal", "field": "quantity", "value": 1 }
+			],
+			"then": { "closure": "addToPrice", "amount": 1000 }
 		}
 	]
 }
