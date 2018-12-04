@@ -1,0 +1,7 @@
+{
+	"closureLibrary": [
+		{ "name": "level42", "closure": "fixedValue", "value": 42 },
+		{ "name": "dawnOfANewEra", "closure": "fixedValue", "value": "2018-12-04"},
+		{ "name": "getPrice", "closure": "get", "prop": "price"}
+	]
+}
