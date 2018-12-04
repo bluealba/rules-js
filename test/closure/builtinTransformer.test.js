@@ -26,13 +26,13 @@ describe("dateRange", () => {
 	});
 
 	it("project transformer, gets number", () => {
-		const transformer = engine.closures.get("project").bind(null, {attribute: "a"}, engine)
+		const transformer = engine.closures.get("get").bind(null, {prop: "a"}, engine)
 		const obtainedValue = transformer.process({a: 4, b: [3,5,28,4]}, context())
 		obtainedValue.should.equal(4)
 	});
 
-	it("project transformer, gets list", () => {
-		const transformer = engine.closures.get("project").bind(null, {attribute: "b"}, engine)
+	it("project transformer, gets array", () => {
+		const transformer = engine.closures.get("get").bind(null, {prop: "b"}, engine)
 		const obtainedValue = transformer.process({a: 4, b: [3,5,28,4]}, context())
 		obtainedValue.should.deep.equal([3,5,28,4])
 	});
