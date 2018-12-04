@@ -139,4 +139,55 @@ describe("Engine", () => {
 		});
 	});
 
+	describe("multiple conditions are applied via a strategy", () => {
+		beforeEach(() => {
+			createRuleFlow("conditional-reducers");
+		});
+
+		it("should use 'and' strategy as default", () => {
+			const result1 = engine.process("conditional-reducers", { price: 10, quantity: 5 });
+			const result2 = engine.process("conditional-reducers", { price: 10, quantity: 8 });
+			return (
+				result1.should.eventually.have
+					.property("fact")
+					.with.property("price")
+					.equal(20) &&
+				result2.should.eventually.have
+					.property("fact")
+					.with.property("price")
+					.equal(10)
+			);
+		});
+
+		it("should accept 'and' as conditionalStrategy and return true if both are true", () => {
+			const result1 = engine.process("conditional-reducers", { price: 20, quantity: 10 });
+			const result2 = engine.process("conditional-reducers", { price: 20, quantity: 9 });
+			return (
+				result1.should.eventually.have
+					.property("fact")
+					.with.property("price")
+					.equal(120) &&
+				result2.should.eventually.have
+					.property("fact")
+					.with.property("price")
+					.equal(20)
+			);
+		});
+
+		it("should accept 'or' as conditionalStrategy and return true if either are true", () => {
+			const result1 = engine.process("conditional-reducers", { price: 30 });
+			const result2 = engine.process("conditional-reducers", { price: 40, quantity: 1 });
+			return (
+				result1.should.eventually.have
+					.property("fact")
+					.with.property("price")
+					.equal(1030) &&
+				result2.should.eventually.have
+					.property("fact")
+					.with.property("price")
+					.equal(1040)
+			);
+		});
+	});
+
 });
