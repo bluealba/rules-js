@@ -139,4 +139,22 @@ describe("Engine", () => {
 		});
 	});
 
+	describe("multiple conditions are applied via a strategy", () => {
+		beforeEach(() => {
+			createRuleFlow("conditional-reducers")
+		});
+
+		it("should use 'and' strategy as default", () => {
+
+		});
+
+		it("should accept 'and' as conditionalStrategy and return true if both are true", () => {
+
+		});
+
+		it("should accept 'or' as conditionalStrategy and return true if either are true", () => {
+
+		});
+	})
+
 });
