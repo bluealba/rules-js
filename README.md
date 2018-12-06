@@ -328,6 +328,38 @@ rules, nested arrays of closures)
 	"createDispatchOrder"
 ]
 ```
+
+#### Arrays as conditions
+
+You can also use closure arrays as conditions. By default they will work with "and" (`&&`) logic
+
+```json
+{
+	"when": ["isFoo", "isBar"],
+	"then": "executeOrder66"
+},
+```
+
+You can also define an "and" or "or" strategies to apply them.
+
+```json
+{
+	"when": ["isFoo", "isBar"],
+	"conditionStrategy": "or",
+	"then": "executeOrder66"
+},
+```
+
+There is also a "last" strategy, which makes it work like a regular reducer closure array.
+
+```json
+{
+	"when": ["transformForFoo", "isFoo"],
+	"conditionStrategy": "last",
+	"then": "executeOrder66"
+},
+```
+
 ### Rules flow
 A rule flow is a definition of a chain of rules that will be evaluated (and applied)
 in order. Typically this is the higher order construction that is registered into rules js.
