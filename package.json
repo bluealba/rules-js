@@ -8,20 +8,24 @@
   "scripts": {
     "test": "eslint '.' && jest",
     "lint": "eslint '.'",
-    "coverage": "jest --coverage"
-	},
-	"dependencies": {
-		"moment": "~2.24.0"
-	},
+    "coverage": "jest --coverage && cat ./tests/coverage/lcov.info | coveralls"
+  },
+  "dependencies": {
+    "moment": "~2.24.0"
+  },
   "devDependencies": {
     "chai": "^4.1.1",
     "chai-as-promised": "^7.1.1",
     "chai-things": "^0.2.0",
+    "coveralls": "^3.0.3",
     "eslint": "^5.15.3",
     "jest": "^24.5.0",
     "sinon": "^7.3.0",
     "sinon-chai": "^3.3.0"
   },
+	"jest": {
+		"collectCoverage": true
+	},
   "repository": {
     "closure": "git",
     "url": "https://github.com/bluealba/rules-js"
