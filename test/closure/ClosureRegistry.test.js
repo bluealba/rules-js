@@ -12,7 +12,7 @@ chai.use(chaiPromised);
 describe("ClosureRegistry", () => {
 	let registry;
 
-	beforeEach("create registry", () => {
+	beforeEach(() => {
 		registry = new ClosureRegistry();
 	})
 
@@ -78,7 +78,7 @@ describe("ClosureRegistry", () => {
 	});
 
 	describe("parse", () => {
-		beforeEach("register functions", () => {
+		beforeEach(() => {
 			registry.add("isFoo", fact => fact === "foo", { override: true });
 			registry.add("always", fact => true, { override: true });
 			registry.add("appendBar", fact => fact + "bar", { override: true });

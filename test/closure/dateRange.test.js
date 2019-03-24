@@ -17,7 +17,7 @@ chai.use(chaiPromised);
 describe("dateRange", () => {
 	let engine;
 
-	beforeEach("create engine", () => {
+	beforeEach(() => {
 		engine = new Engine();
 		commmons(engine);
 		engine.closures.add("saleDate", (fact) => fact.saleDate)
@@ -51,7 +51,7 @@ describe("dateRange", () => {
 	describe("filter actions with dateFrom", () => {
 		let rule
 
-		beforeEach("create rule", () => {
+		beforeEach(() => {
 			rule = new Rule(
 				"incPrice",
 				engine.closures.get("dateRange").bind(null, {dateFrom: "2018-09-01", dateExtractor: "saleDate"}, engine),
@@ -85,7 +85,7 @@ describe("dateRange", () => {
 	describe("filter actions with dateTo", () => {
 		let rule
 
-		beforeEach("create rule", () => {
+		beforeEach(() => {
 			rule = new Rule(
 				"incPrice",
 				engine.closures.get("dateRange").bind(null, {dateTo: "2018-09-01", dateExtractor: "saleDate"}, engine),
@@ -119,7 +119,7 @@ describe("dateRange", () => {
 	describe("filter actions with dateFrom and dateTo", () => {
 		let rule
 
-		beforeEach("create rule", () => {
+		beforeEach(() => {
 			rule = new Rule(
 				"incPrice",
 				engine.closures.get("dateRange").bind(null, {dateFrom: "2018-09-01", dateTo: "2018-09-30", dateExtractor: "saleDate"}, engine),
@@ -181,7 +181,7 @@ describe("dateRange", () => {
 	describe("filter actions with dateBefore", () => {
 		let rule
 
-		beforeEach("create rule", () => {
+		beforeEach(() => {
 			rule = new Rule(
 				"incPrice",
 				engine.closures.get("dateRange").bind(null, {dateBefore: "2018-09-01", dateExtractor: "saleDate"}, engine),
@@ -229,7 +229,7 @@ describe("dateRange", () => {
 	describe("filter actions with dateAfter", () => {
 		let rule
 
-		beforeEach("create rule", () => {
+		beforeEach(() => {
 			rule = new Rule(
 				"incPrice",
 				engine.closures.get("dateRange").bind(null, {dateAfter: "2018-09-30", dateExtractor: "saleDate"}, engine),

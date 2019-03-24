@@ -18,7 +18,7 @@ function addDefinitionsFromFile(name, engine) {
 describe("closure library", () => {
 	let engine;
 
-	beforeEach("create engine", () => {
+	beforeEach(() => {
 		engine = new Engine();
 		commmons(engine);
 		addDefinitionsFromFile("closure-library", engine);

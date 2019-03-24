@@ -14,7 +14,7 @@ chai.use(chaiPromised);
 describe("dateRange", () => {
 	let engine;
 
-	beforeEach("create engine", () => {
+	beforeEach(() => {
 		engine = new Engine();
 		commmons(engine);
 	})
