@@ -9,12 +9,12 @@
 ## Overview
 
 This is an implementation of a very lightweight pure javascript rule engine.
-It's very loosely inspired on drools, but keeping an extra effort in keeping
-complexity to the bare minimum.
+It's very loosely inspired on drools, but keeping an extra effort in keeping complexity to the bare minimum.
 
 - [Rules.JS](#rulesjs)
   * [Overview](#overview)
-    + [Example](#example)
+    + [Install](#install)
+    + [Usage Example](#usage-example)
   * [Engine](#engine)
   * [Fact](#fact)
   * [Closures](#closures)
@@ -24,8 +24,15 @@ complexity to the bare minimum.
     + [Rules](#rules)
     + [Closure arrays (reduce)](#closure-arrays-reduce)
     + [Rules flow](#rules-flow)
+		
+### Install
 
-### Example
+```
+npm install rules-js
+```
+
+
+### Usage Example
 This very naive example on how to create an small rule engine to process online orders. This isn't meant to imitate a full business process, neither to shown the full potential of Rules.JS
 
 We start by defining a rules file in JSON.
