@@ -26,9 +26,7 @@ complexity to the bare minimum.
     + [Rules flow](#rules-flow)
 
 ### Example
-This very naive example on how to create an small rule engine to process online
-orders. This isn't meant to imitate a full business process, neither to shown
-the full potential of Rules.JS.
+This very naive example on how to create an small rule engine to process online orders. This isn't meant to imitate a full business process, neither to shown the full potential of Rules.JS
 
 We start by defining a rules file in JSON.
 
@@ -62,8 +60,7 @@ We start by defining a rules file in JSON.
 }
 ```
 
-Now we can evaluate any order using such rules file. First we create the
-engine.  We can do it inside a js module:
+Now we can evaluate any order using such rules file. First we create the engine.  We can do it inside a js module:
 
 ```javascript
 const engine = new Engine();
@@ -203,10 +200,10 @@ class TaxCalculator extends Closure {
 
 Note that any closure will receive two parameters:
 ```
-@param      {Object}  fact        				the fact is the object that is current being evaluated by the closure.
-@param      {Context} context     				the fact's execution context
-@param      {Object}  context.parameters 	the execution parameters
-@param      {Engine}	context.engine			the rule engine
+@param      {Object}  fact - the fact is the object that is current being evaluated by the closure.
+@param      {Context} context - the fact's execution context
+@param      {Object}  context.parameters - the execution parameters
+@param      {Engine}  context.engine - the rule engine
 
 @return     {Object}  the result of the computation (this can be a Promise too!)
 ```
